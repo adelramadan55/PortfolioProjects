@@ -1,0 +1,46 @@
+ --the most popular Hacker News stories:
+ select title, score
+ from hacker_news
+ order by score desc
+ limit 5;
+
+ --Is a small percentage of Hacker News submitters taking the majority of the points?
+ select sum(score)
+ from hacker_news;
+ --pinpoint the users who have accumulated a lot of points across their stories.
+ select users, sum(score)
+ from hacker_news
+ group by 1
+ having sum(score) > 200
+ order by 2 desc;
+ --How many times has each offending user posted this link?
+ select user, count(*)
+ from hacker_news
+ where url like '%watch?v=dQw4w9WgXcQ%'
+ group by user
+ order by count(*) desc;
+
+ --Which of these sites feed Hacker News the most:GitHub, Medium, or New York Times?
+ select case
+      when url like '%github.com%' then 'GitHub'
+      when url like'%medium.com%' then 'Medium'
+      when url like '%nytimes.com' then 'New York Times'
+      else 'other'
+ end as 'Source', 
+ count(*)
+ from hacker_news
+ group by 1;
+
+--What's the best time to post a story?
+ select timestamp, strftime('%H', timestamp)
+ from hacker_news
+ group by 1
+ limit 10;
+
+ select strftime('%H', timestamp) as 'hour',
+        round(avg(s9core), 0) as 'avgscore',
+        count(*)
+        from hacker_news
+  where timestamp is not null      
+  group by 1
+  order by 2 desc;
