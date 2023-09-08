@@ -1,0 +1,25 @@
+select * from startups;
+--Calculate the total number of companies in the table.
+select count(*) from startups;
+--the total value of all companies in this table
+select sum(valuation) from startups;
+--What is the highest amount raised by a startup during ‘Seed’ stage.?
+select max(raised) from startups
+where stage = 'seed';
+--In what year was the oldest company on the list founded?
+select min(founded) from startups;
+--the average valuation in each category.
+select category, round(avg(valuation), 2) from startups
+group by 1
+order by 2 desc;
+--What are the most competitive markets?
+select category, count(*)
+from startups
+group by 1
+having count(*) > 3
+order by 2 desc;
+--Let's see if there's a difference in startups sizes among different locations
+select location, avg(employees)
+from startups
+group by 1
+having avg(employess) > 500;
